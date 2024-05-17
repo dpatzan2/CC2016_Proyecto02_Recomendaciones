@@ -1,31 +1,20 @@
 'use client'
 
 import ImageInput from "@/components/inputSeleccion";
-import { useState } from "react";
+import { getAllCountries } from "@/controllers/countries.controller";
+import { Country } from "@/types/types";
+import { useEffect, useState } from "react";
 
 export default function Formulario() {
     const [selectedCards, setSelectedCards] = useState<number[]>([]);
     const [currentPhase, setCurrentPhase] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [country, setCountry] = useState<Country[]>([]);
 
-    const cards = [
-        { id: 1, title: 'Action', image: 'https://via.placeholder.com/150' },
-        { id: 2, title: 'Comedy', image: 'https://via.placeholder.com/150' },
-        { id: 3, title: 'Drama', image: 'https://via.placeholder.com/150' },
-        { id: 4, title: 'Horror', image: 'https://via.placeholder.com/150' },
-        { id: 5, title: 'Romance', image: 'https://via.placeholder.com/150' },
-        { id: 6, title: 'Sci-Fi', image: 'https://via.placeholder.com/150' },
-        { id: 7, title: 'Thriller', image: 'https://via.placeholder.com/150' },
-        { id: 8, title: 'Adventure', image: 'https://via.placeholder.com/150' },
-        { id: 9, title: 'Animation', image: 'https://via.placeholder.com/150' },
-        { id: 10, title: 'Fantasy', image: 'https://via.placeholder.com/150' },
-        { id: 11, title: 'Mystery', image: 'https://via.placeholder.com/150' },
-        { id: 12, title: 'Biography', image: 'https://via.placeholder.com/150' },
-    ];
 
     const itemsPerPage = 9;
-    const filteredCards = cards.filter(card => card.title.toLowerCase().includes(searchTerm.toLowerCase()));
+    const filteredCards = country.filter(country => country.countryName.toLowerCase().includes(searchTerm.toLowerCase()));
     const totalPages = Math.ceil(filteredCards.length / itemsPerPage);
     const displayedCards = filteredCards.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
@@ -58,6 +47,15 @@ export default function Formulario() {
         alert(`Selected cards: ${selectedCards.join(', ')}`);
     }
 
+    useEffect(() => {
+        async function fetchData() {
+          const userData = await getAllCountries();
+          console.log(userData)
+          setCountry(userData);
+        }
+        fetchData();
+      }, []);
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-300">
             <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl" style={{ minHeight: '80vh', borderRadius: '50px' }}>
@@ -75,13 +73,13 @@ export default function Formulario() {
                                 />
                             </div>
                             <div className="grid grid-cols-3 gap-4 mb-4">
-                                {displayedCards.map(card => (
+                                {displayedCards.map(country => (
                                     <ImageInput
-                                        key={card.id}
-                                        title={card.title}
-                                        image={card.image}
-                                        selected={selectedCards.includes(card.id)}
-                                        onClick={() => handleCardClick(card.id)}
+                                        key={country.id}
+                                        title={country.countryName}
+                                        image='https://via.placeholder.com/150'
+                                        selected={selectedCards.includes(Number(country.id))}
+                                        onClick={() => handleCardClick(Number(country.id))}
                                     />
                                 ))}
                             </div>
