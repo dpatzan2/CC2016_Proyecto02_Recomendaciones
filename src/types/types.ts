@@ -1,14 +1,3 @@
-export interface User {
-    id: string;
-    title: string;
-    year: string;
-    genres: string[];
-    releaseDate: string;
-    posterURL: string;
-    principalActors: string[];
-    countryOrigin: string;
-    durations: string;
-}
 
 export interface Actors {
     id: string;
@@ -55,14 +44,14 @@ export interface Phase1Props {
     onNext: () => void;
     onCardsSelected: (selectedCards: number[]) => void;
 }
-  
+
 export interface Phase2Props {
     actors: Actors[];
     onNext: () => void;
     onPrevious: () => void;
     onCardsSelected: (selectedCards: number[]) => void;
 }
-  
+
 
 export interface Phase3Props {
     onPrevious: () => void;
@@ -73,3 +62,16 @@ export interface Phase4Props {
     onPrevious: () => void;
     onSubmit: () => void;
 }
+
+export interface ImageInputProps {
+    title: string;
+    image: string;
+    selected: boolean;
+    onClick: () => void;
+}
+
+export interface User {
+    username: string;
+    password: string;
+}
+

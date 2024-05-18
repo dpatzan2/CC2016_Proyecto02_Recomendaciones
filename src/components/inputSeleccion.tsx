@@ -1,13 +1,9 @@
 'use client';
 
+import { ImageInputProps } from '@/types/types';
 import React from 'react';
 
-interface ImageInputProps {
-  title: string;
-  image: string;
-  selected: boolean;
-  onClick: () => void;
-}
+
 
 export default function ImageInput({ title, image, selected, onClick  }: ImageInputProps) {
   return (
