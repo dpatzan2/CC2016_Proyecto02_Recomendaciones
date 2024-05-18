@@ -59,6 +59,17 @@ export interface Phase1Props {
 export interface Phase2Props {
     actors: Actors[];
     onNext: () => void;
+    onPrevious: () => void;
     onCardsSelected: (selectedCards: number[]) => void;
 }
   
+
+export interface Phase3Props {
+    onPrevious: () => void;
+    onNext: (durationRange: { min: string; max: string }) => void;
+}
+
+export interface Phase4Props {
+    onPrevious: () => void;
+    onSubmit: () => void;
+}

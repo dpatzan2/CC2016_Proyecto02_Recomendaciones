@@ -5,7 +5,7 @@ import ImageInput from "../inputSeleccion";
 
 
 
-export default function Phase2({ actors, onNext, onCardsSelected }: Phase2Props) {
+export default function Phase2({ actors, onNext, onPrevious, onCardsSelected }: Phase2Props) {
     const [selectedCards, setSelectedCards] = useState<number[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -40,7 +40,7 @@ export default function Phase2({ actors, onNext, onCardsSelected }: Phase2Props)
                 <input
                     type="text"
                     placeholder="Buscar"
-                    className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-inherit text-black"
+                    className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -75,13 +75,22 @@ export default function Phase2({ actors, onNext, onCardsSelected }: Phase2Props)
                     Siguiente
                 </button>
             </div>
-            <button
-                type="button"
-                className="block mt-4 ml-auto bg-blue-500 text-white py-2 px-4 rounded"
-                onClick={onNext}
-            >
-                Siguiente Fase
-            </button>
+            <div className="flex justify-between items-center mt-4">
+                <button 
+                    type="button" 
+                    className="bg-gray-500 text-white py-2 px-4 rounded"
+                    onClick={onPrevious}
+                >
+                    Anterior Fase
+                </button>
+                <button
+                    type="button"
+                    className="bg-blue-500 text-white py-2 px-4 rounded"
+                    onClick={onNext}
+                >
+                    Siguiente Fase
+                </button>
+            </div>
         </div>
     );
 }

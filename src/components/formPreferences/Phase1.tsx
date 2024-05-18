@@ -40,7 +40,7 @@ export default function Phase1({ countries, onNext, onCardsSelected }: Phase1Pro
                 <input
                     type="text"
                     placeholder="Buscar"
-                    className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-inherit text-black"
+                    className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500  text-black"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />

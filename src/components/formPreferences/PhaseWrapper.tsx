@@ -5,6 +5,8 @@ import { Actors, Country } from "@/types/types";
 import Phase1 from "./Phase1";
 import Phase2 from "./Phase2";
 import { getAllActors } from "@/controllers/actors.controller";
+import Phase3 from "./Phase3";
+import Phase4 from "./Phase4";
 
 export default function PhaseWrapper() {
     const [currentPhase, setCurrentPhase] = useState<number>(1);
@@ -12,6 +14,7 @@ export default function PhaseWrapper() {
     const [actors, setActors] = useState<Actors[]>([]);
     const [phase1Cards, setPhase1Cards] = useState<number[]>([]);
     const [phase2Cards, setPhase2Cards] = useState<number[]>([]);
+    const [durationRange, setDurationRange] = useState<{ min: string; max: string }>({ min: "", max: "" });
 
     useEffect(() => {
         async function fetchData() {
@@ -32,10 +35,16 @@ export default function PhaseWrapper() {
         setCurrentPhase(currentPhase - 1);
     }
 
-    const handleSubmit = (selectedCards: number[]) => {
+
+    const handleDurationRangeSelected = (range: { min: string; max: string }) => {
+        setDurationRange(range);
+        handleNextPhase();
+    }
+
+    const handleFinalSubmit = () => {
         console.log('Phase 1 Cards:', phase1Cards);
         console.log('Phase 2 Cards:', phase2Cards);
-        alert(`Selected cards:\nPhase 1: ${phase1Cards.join(', ')}\nPhase 2: ${selectedCards.join(', ')}`);
+        alert(`Selected cards:\nPhase 1: ${phase1Cards.join(', ')}\nPhase 2: ${phase2Cards.join(', ')}\nPhase 3: ${durationRange.min} ${durationRange.max}`);
     }
 
     return (
@@ -53,7 +62,22 @@ export default function PhaseWrapper() {
                         <Phase2
                             actors={actors}
                             onNext={handleNextPhase}
+                            onPrevious={handlePreviousPhase}
                             onCardsSelected={setPhase2Cards}
+                        />
+                    )}
+
+                    {currentPhase === 3 && (
+                        <Phase3
+                            onPrevious={handlePreviousPhase}
+                            onNext={handleDurationRangeSelected}
+                        />
+                    )}
+
+                    {currentPhase === 4 && (
+                        <Phase4
+                            onPrevious={handlePreviousPhase}
+                            onSubmit={handleFinalSubmit}
                         />
                     )}
                 </form>
