@@ -10,6 +10,13 @@ export interface User {
     durations: string;
 }
 
+export interface Actors {
+    id: string;
+    completeName: string;
+    country: string;
+    picture: string;
+}
+
 export interface Country {
     id: string;
     countryName: string;
@@ -43,15 +50,15 @@ export interface UserPreferences {
     releaseYearRange: ReleaseYearRange;
 }
 
-
-export interface FormularioProps {
-    selectedCards: number[];
-    setSelectedCards: React.Dispatch<React.SetStateAction<number[]>>;
-    currentPhase: number;
-    setCurrentPhase: React.Dispatch<React.SetStateAction<number>>;
-    currentPage: number;
-    country: Country[];
-    setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
-    setCountry: React.Dispatch<React.SetStateAction<Country[]>>;
-  }
+export interface Phase1Props {
+    countries: Country[];
+    onNext: () => void;
+    onCardsSelected: (selectedCards: number[]) => void;
+}
+  
+export interface Phase2Props {
+    actors: Actors[];
+    onNext: () => void;
+    onCardsSelected: (selectedCards: number[]) => void;
+}
   

@@ -1,24 +1,21 @@
-'use client'
-
-import { Country, FormularioProps } from "@/types/types";
-import { useState,  } from "react";
+// Phase2.tsx
+import { Phase2Props } from "@/types/types";
+import { useState, useEffect } from "react";
 import ImageInput from "../inputSeleccion";
 
-export default function phase1Formulario({selectedCards,
-    setSelectedCards,
-    currentPhase,
-    setCurrentPhase,
-    currentPage,
-    setCurrentPage,
-    country,
-    setCountry
-  }: FormularioProps) {
 
-    
+
+export default function Phase2({ actors, onNext, onCardsSelected }: Phase2Props) {
+    const [selectedCards, setSelectedCards] = useState<number[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
+    const [currentPage, setCurrentPage] = useState<number>(1);
+
+    useEffect(() => {
+        onCardsSelected(selectedCards);
+    }, [selectedCards, onCardsSelected]);
 
     const itemsPerPage = 9;
-    const filteredCards = country.filter(country => country.countryName.toLowerCase().includes(searchTerm.toLowerCase()));
+    const filteredCards = actors.filter(actors => actors.completeName.toLowerCase().includes(searchTerm.toLowerCase()));
     const totalPages = Math.ceil(filteredCards.length / itemsPerPage);
     const displayedCards = filteredCards.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
@@ -26,10 +23,6 @@ export default function phase1Formulario({selectedCards,
         setSelectedCards(prevSelected =>
             prevSelected.includes(id) ? prevSelected.filter(cardId => cardId !== id) : [...prevSelected, id]
         );
-    }
-    const handleNextPhase = () => {
-        setCurrentPhase(currentPhase + 1);
-        setCurrentPage(1); 
     }
 
     const handlePreviousPage = () => {
@@ -39,6 +32,7 @@ export default function phase1Formulario({selectedCards,
     const handleNextPage = () => {
         setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
     }
+
     return (
         <div className="phase">
             <h2 className="text-center text-2xl mb-4">Selecciona el género de película que más te gustan</h2>
@@ -52,13 +46,13 @@ export default function phase1Formulario({selectedCards,
                 />
             </div>
             <div className="grid grid-cols-3 gap-4 mb-4">
-                {displayedCards.map(country => (
+                {displayedCards.map(actors => (
                     <ImageInput
-                        key={country.id}
-                        title={country.countryName}
+                        key={actors.id}
+                        title={actors.completeName}
                         image='https://via.placeholder.com/150'
-                        selected={selectedCards.includes(Number(country.id))}
-                        onClick={() => handleCardClick(Number(country.id))}
+                        selected={selectedCards.includes(Number(actors.id))}
+                        onClick={() => handleCardClick(Number(actors.id))}
                     />
                 ))}
             </div>
@@ -84,7 +78,7 @@ export default function phase1Formulario({selectedCards,
             <button
                 type="button"
                 className="block mt-4 ml-auto bg-blue-500 text-white py-2 px-4 rounded"
-                onClick={handleNextPhase}
+                onClick={onNext}
             >
                 Siguiente Fase
             </button>
