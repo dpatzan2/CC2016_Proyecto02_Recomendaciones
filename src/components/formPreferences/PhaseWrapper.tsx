@@ -54,19 +54,41 @@ export default function PhaseWrapper() {
         const preferences: UserPreferences = {
             preferredCountries: phase1Cards,
             preferredActors: phase2Cards,
-            durationRange: { min: durationRange.min, max: durationRange.max },
+            durationRange: { min: parseInt(durationRange.min), max: parseInt(durationRange.max) },
             releaseYearRange: { min: yearRange.min, max: yearRange.max },
         };
-
+    
+        console.log("User Preferences:", preferences);
+    
+        const filterMovies = (movies, preferences) => {
+            return movies.filter(movie => {
+                const movieDuration = parseDuration(movie.duration);
+                console.log("Movie:", movie.title, "Duration:", movieDuration, "Year:", movie.year);
+                return (
+                    movieDuration >= preferences.durationRange.min &&
+                    movieDuration <= preferences.durationRange.max &&
+                    movie.year >= preferences.releaseYearRange.min &&
+                    movie.year <= preferences.releaseYearRange.max
+                );
+            });
+        };
+    
+        const parseDuration = (durationStr) => {
+            const [hours, minutes] = durationStr.split(':').map(Number);
+            return hours * 60 + minutes;
+        };
+    
         try {
-            //const movies = await getFilteredMovies(preferences);
             const movies = await getAllMovies();
-            console.log('Filtered Movies:', movies);
-            //alert(`Selected cards:\nPhase 1: ${phase1Cards.join(', ')}\nPhase 2: ${phase2Cards.join(', ')}\nPhase 3: ${durationRange.min} ${durationRange.max}\nPhase 4: ${yearRange.min} ${yearRange.max}\nFiltered Movies: ${movies?.map(movie => movie.title).join(', ')}`);
+            console.log("All Movies:", movies);
+            const filteredMovies = filterMovies(movies, preferences);
+            console.log('Filtered Movies:', filteredMovies);
+            alert(`Filtered Movies: ${filteredMovies.map(movie => movie.title).join(', ')}`);
         } catch (error) {
             console.error("Error filtering movies:", error);
         }
-    }
+    };
+    
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-300 relative">
