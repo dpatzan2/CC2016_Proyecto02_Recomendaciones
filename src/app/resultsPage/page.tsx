@@ -1,5 +1,5 @@
 'use client'
-export default function Results(){
+export default function ResultsPage(){
     return (
         <div>gol</div>
     );

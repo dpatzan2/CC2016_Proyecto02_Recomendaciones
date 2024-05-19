@@ -11,15 +11,15 @@ export default function LoginPage() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const router = useRouter();
-    const { login } = useAuth(); // Usar el hook useAuth para obtener el método login
+    const { login } = useAuth(); 
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         const result = await authenticateUser(username, password);
 
         if (result.token) {
-            login(result.token); // Llamar a login para almacenar el token y actualizar el estado global
-            router.push('/formulario'); // Redirigir a la página principal u otra página protegida
+            login(result.token); 
+            router.push('/formulario'); 
         } else {
             setError(result.error);
         }

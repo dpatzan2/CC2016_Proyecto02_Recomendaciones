@@ -15,8 +15,8 @@ export default function PhaseWrapper() {
     const [currentPhase, setCurrentPhase] = useState<number>(1);
     const [countries, setCountries] = useState<Country[]>([]);
     const [actors, setActors] = useState<Actors[]>([]);
-    const [phase1Cards, setPhase1Cards] = useState<string[]>([]); // Cambio a string[]
-    const [phase2Cards, setPhase2Cards] = useState<string[]>([]); // Cambio a string[]
+    const [phase1Cards, setPhase1Cards] = useState<string[]>([]);
+    const [phase2Cards, setPhase2Cards] = useState<string[]>([]); 
     const [durationRange, setDurationRange] = useState<{ min: string; max: string }>({ min: "", max: "" });
     const [yearRange, setYearRange] = useState<{ min: number; max: number }>({ min: 2000, max: 2024 });
     const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
@@ -67,7 +67,7 @@ export default function PhaseWrapper() {
              const movies = await getFilteredMovies(preferences);
              setFilteredMovies(movies)
              console.log('Filtered Movies:', movies);
-             router.push('/results');
+             router.push('/ResultsPage');
              
         } catch (error) {
             console.error("Error filtering movies:", error);

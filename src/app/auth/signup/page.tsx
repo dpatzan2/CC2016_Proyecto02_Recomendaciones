@@ -18,8 +18,8 @@ export default function RegisterPage() {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        setError(''); // Clear previous errors
-        setSuccess(''); // Clear previous success messages
+        setError(''); 
+        setSuccess(''); 
         const result = await registerUser({ username, password });
         if (result.error) {
             setError(result.error);
