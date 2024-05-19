@@ -83,3 +83,9 @@ export interface AuthContextType {
     logout: () => void;
     loading: boolean;
 }
+
+
+export interface UserLogged {
+    id: number;
+    username: string;
+}

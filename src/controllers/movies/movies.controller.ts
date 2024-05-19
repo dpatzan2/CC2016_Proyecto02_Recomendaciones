@@ -3,10 +3,6 @@ import connectionDB from '@/db/connect';
 import { Movie, UserPreferences } from '@/types/types';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-const durationToSeconds = (duration: string): number => {
-    const parts = duration.split(':');
-    return (+parts[0]) * 3600 + (+parts[1]) * 60 + (+parts[2]);
-  };
   
 export const getAllMovies = async () => {
     try {
@@ -32,10 +28,10 @@ export const getFilteredMovies = async (preferences: UserPreferences): Promise<M
         const result = await session.run(`
             MATCH (m:Movies)
             WHERE m.countryOrigin IN $preferredCountries
-              AND (m.principalActors__001 IN $preferredActors OR m.principalActors__002 IN $preferredActors)
-              AND m.year >= $releaseYearRangeMin AND m.year <= $releaseYearRangeMax
-              AND toFloat(split(m.duration, ':')[0]) * 60 + toFloat(split(m.duration, ':')[1]) >= $durationRangeMin
-              AND toFloat(split(m.duration, ':')[0]) * 60 + toFloat(split(m.duration, ':')[1]) <= $durationRangeMax
+              OR (m.principalActors__001 IN $preferredActors OR m.principalActors__002 IN $preferredActors)
+              OR m.year >= $releaseYearRangeMin AND m.year <= $releaseYearRangeMax
+              OR toFloat(split(m.duration, ':')[0]) * 60 + toFloat(split(m.duration, ':')[1]) >= $durationRangeMin
+              OR toFloat(split(m.duration, ':')[0]) * 60 + toFloat(split(m.duration, ':')[1]) <= $durationRangeMax
             RETURN m
         `, {
             preferredCountries,
@@ -67,3 +63,4 @@ export const getFilteredMovies = async (preferences: UserPreferences): Promise<M
         throw error;
     }
 };
+

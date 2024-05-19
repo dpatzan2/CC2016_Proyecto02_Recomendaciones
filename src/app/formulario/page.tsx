@@ -19,10 +19,10 @@ export default function Formulario() {
     if (loading) {
         return <div>Loading...</div>; 
     }
-
     if (!user) {
         return null; 
     }
 
+    console.log(user)
     return <PhaseWrapper />;
 }

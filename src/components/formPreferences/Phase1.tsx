@@ -33,7 +33,7 @@ export default function Phase1({ countries, onNext, onCardsSelected }: Phase1Pro
 
     return (
         <div className="phase">
-            <h2 className="text-center text-2xl mb-4 text-black">Selecciona el género de película que más te gustan</h2>
+            <h2 className="text-center text-2xl mb-4 text-black">Selecciona el pais de origen de películas que más te gustan</h2>
             <hr />
             <br />
             <div className="relative mb-4">

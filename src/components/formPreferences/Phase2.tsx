@@ -33,7 +33,7 @@ export default function Phase2({ actors, onNext, onPrevious, onCardsSelected }: 
 
     return (
         <div className="phase">
-            <h2 className="text-center text-2xl mb-4 text-black">Selecciona el género de película que más te gustan</h2>
+            <h2 className="text-center text-2xl mb-4 text-black">Selecciona tus actores favoritos</h2>
             <hr />
             <br />
             <div className="relative mb-4">

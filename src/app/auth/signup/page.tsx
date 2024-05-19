@@ -1,6 +1,7 @@
 'use client'
 
 import { registerUser } from '@/controllers/users/users.controller';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function RegisterPage() {
@@ -8,6 +9,11 @@ export default function RegisterPage() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const router = useRouter();
+
+    const handleSignInRedirect = () => {
+        router.push('/auth/singin');
+    };
     
 
     const handleSubmit = async (event: React.FormEvent) => {
@@ -91,7 +97,7 @@ export default function RegisterPage() {
                                     Sign up
                                 </button>
                                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                                    Already have an account? <a href="#" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign in</a>
+                                    Already have an account? <a href="#" className="font-medium text-primary-600 hover:underline dark:text-primary-500" onClick={handleSignInRedirect}>Sign in</a>
                                 </p>
                             </form>
                         </div>

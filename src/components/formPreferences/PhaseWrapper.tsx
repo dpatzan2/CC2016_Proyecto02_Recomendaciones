@@ -18,6 +18,8 @@ export default function PhaseWrapper() {
     const [phase2Cards, setPhase2Cards] = useState<string[]>([]); // Cambio a string[]
     const [durationRange, setDurationRange] = useState<{ min: string; max: string }>({ min: "", max: "" });
     const [yearRange, setYearRange] = useState<{ min: number; max: number }>({ min: 2000, max: 2024 });
+    const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
+
 
     const { logout } = useAuth();
 
@@ -51,43 +53,25 @@ export default function PhaseWrapper() {
     }
 
     const handleFinalSubmit = async () => {
+        console.log(phase1Cards);
         const preferences: UserPreferences = {
             preferredCountries: phase1Cards,
             preferredActors: phase2Cards,
-            durationRange: { min: parseInt(durationRange.min), max: parseInt(durationRange.max) },
+            durationRange: { min: durationRange.min, max: durationRange.max },
             releaseYearRange: { min: yearRange.min, max: yearRange.max },
         };
-    
-        console.log("User Preferences:", preferences);
-    
-        const filterMovies = (movies, preferences) => {
-            return movies.filter(movie => {
-                const movieDuration = parseDuration(movie.duration);
-                console.log("Movie:", movie.title, "Duration:", movieDuration, "Year:", movie.year);
-                return (
-                    movieDuration >= preferences.durationRange.min &&
-                    movieDuration <= preferences.durationRange.max &&
-                    movie.year >= preferences.releaseYearRange.min &&
-                    movie.year <= preferences.releaseYearRange.max
-                );
-            });
-        };
-    
-        const parseDuration = (durationStr) => {
-            const [hours, minutes] = durationStr.split(':').map(Number);
-            return hours * 60 + minutes;
-        };
-    
+
         try {
-            const movies = await getAllMovies();
-            console.log("All Movies:", movies);
-            const filteredMovies = filterMovies(movies, preferences);
-            console.log('Filtered Movies:', filteredMovies);
-            alert(`Filtered Movies: ${filteredMovies.map(movie => movie.title).join(', ')}`);
+             const movies = await getFilteredMovies(preferences);
+             setFilteredMovies(movies)
+             console.log('Filtered Movies:', movies);
+
+             
         } catch (error) {
             console.error("Error filtering movies:", error);
         }
-    };
+    }
+
     
 
     return (
