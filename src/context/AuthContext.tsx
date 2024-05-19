@@ -1,4 +1,3 @@
-
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
@@ -20,15 +19,29 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         const token = Cookies.get('token');
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        console.log("Token encontrado:", token);
+
         if (token) {
-            const decoded: any = JWT.jwtDecode(token);
-            setUser(decoded.username);
+            try {
+                const decoded: any = JWT.jwtDecode(token);
+                console.log("Token decodificado:", decoded);
+                setUser(decoded.username);
+            } catch (error) {
+                console.error("Error decodificando el token:", error);
+                Cookies.remove('token');
+                setUser(null);
+                router.push('/auth/singin');
+            }
+        } else {
+            router.push('/auth/singin');
         }
-    }, []);
+    }, [router]);
 
     const login = (token: string) => {
         Cookies.set('token', token);
         const decoded: any = JWT.jwtDecode(token);
+        console.log("Token decodificado al iniciar sesión:", decoded);
         setUser(decoded.username);
         router.push('/');
     };
@@ -36,7 +49,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const logout = () => {
         Cookies.remove('token');
         setUser(null);
-        router.push('/auth/singin');
+        router.push('/');
     };
 
     return (
@@ -49,7 +62,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 export const useAuth = () => {
     const context = useContext(AuthContext);
     if (!context) {
-        throw new Error('useAuth must be used within an AuthProvider');
+        throw new Error('useAuth debe ser usado dentro de un AuthProvider');
     }
     return context;
 };

@@ -1,26 +1,27 @@
-
 'use client'
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { authenticateUser } from '@/controllers/users/users.controller';
-
+import { useAuth } from '@/context/AuthContext'; // Importar el hook useAuth
+import Cookies from 'js-cookie';
 
 export default function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const router = useRouter();
+    const { login } = useAuth(); // Usar el hook useAuth para obtener el método login
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        setError(''); 
         const result = await authenticateUser(username, password);
-        if (result.error) {
-            setError(result.error);
+
+        if (result.token) {
+            login(result.token); // Llamar a login para almacenar el token y actualizar el estado global
+            router.push('/'); // Redirigir a la página principal u otra página protegida
         } else {
-            alert('User authenticated successfully');
-            // Redirect or handle successful login
+            setError(result.error);
         }
     };
 

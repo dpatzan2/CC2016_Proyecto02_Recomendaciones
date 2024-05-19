@@ -4,7 +4,9 @@
 import connectionDB from "@/db/connect";
 import { User } from "@/types/types";
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
+const SECRET_KEY = 'clave_secreta';
 export const registerUser = async (user: User): Promise<any> => {
     console.log(user.username + user.password)
     try {
@@ -47,7 +49,11 @@ export const authenticateUser = async (username: string, password: string): Prom
             return { error: 'Invalid username or password' };
         }
 
-        return { success: true };
+        // Generar un token JWT
+        const token = jwt.sign({ username: username }, SECRET_KEY, { expiresIn: '1h' });
+
+
+        return { token };
     } catch (error) {
         console.log(error);
         return { error: 'Error during authentication' };

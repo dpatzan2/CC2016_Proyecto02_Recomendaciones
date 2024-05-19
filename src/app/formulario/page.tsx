@@ -1,14 +1,16 @@
+'use client';
 
 import PhaseWrapper from "@/components/formPreferences/PhaseWrapper";
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Formulario() {
-
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
 
     if (!user) {
-        // Renderizar un mensaje o redireccionar si no está autenticado
-        return <p>Loading...</p>;
+        return <p>Loading...</p>; // O redirigir a una página de carga
     }
+
     return <PhaseWrapper />;
 }
