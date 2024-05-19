@@ -6,7 +6,7 @@ import { authenticateUser } from '@/controllers/users/users.controller';
 import { useAuth } from '@/context/AuthContext'; // Importar el hook useAuth
 import Cookies from 'js-cookie';
 
-export default function SignInPage() {
+export default function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -104,5 +104,3 @@ export default function SignInPage() {
         </>
     );
 }
-
-SignInPage.displayName = 'SignInPage';
