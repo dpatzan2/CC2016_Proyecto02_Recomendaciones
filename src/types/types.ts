@@ -9,6 +9,7 @@ export interface Actors {
 export interface Country {
     id: string;
     countryName: string;
+    banner: string;
 }
 
 export interface Movie {

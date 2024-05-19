@@ -8,7 +8,7 @@ export const getAllCountries = async () => {
         const driver = await connectionDB();
         const session = driver.session();
         const result = await session.run(
-            `MATCH (u:Contry) RETURN u`
+            `MATCH (u:Contries) RETURN u`
         );
         session.close();
         return result.records.map(( record: any ) =>  { return {...record.toObject().u.properties, id: record.toObject().u.identity.toNumber()}});

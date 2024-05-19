@@ -50,7 +50,7 @@ export default function Phase1({ countries, onNext, onCardsSelected }: Phase1Pro
                     <ImageInput
                         key={country.id}
                         title={country.countryName}
-                        image='https://via.placeholder.com/150'
+                        image={country.banner}
                         selected={selectedCards.includes(country.countryName)}
                         onClick={() => handleCardClick(country.countryName)}
                     />

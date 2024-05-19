@@ -50,7 +50,7 @@ export default function Phase2({ actors, onNext, onPrevious, onCardsSelected }: 
                     <ImageInput
                         key={actor.id}
                         title={actor.completeName}
-                        image='https://via.placeholder.com/150'
+                        image={actor.picture}
                         selected={selectedCards.includes(actor.completeName)}
                         onClick={() => handleCardClick(actor.completeName)}
                     />
