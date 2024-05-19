@@ -14,6 +14,8 @@ export default function Phase4({ onPrevious, onSubmit }: Phase4Props) {
     return (
         <div className="phase relative">
             <h2 className="text-center text-2xl mb-4 text-black">Fase 4: Selecciona el Rango de Años</h2>
+            <hr />
+            <br />
             <div className="flex flex-col items-center pt-10">
                 <Range
                     values={[yearRange.min, yearRange.max]}

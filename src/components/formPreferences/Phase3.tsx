@@ -13,7 +13,9 @@ export default function Phase3({ onPrevious, onNext }: Phase3Props) {
 
     return (
         <div className="phase">
-            <h2 className="text-center text-2xl mb-4">Selecciona el rango de duración de las películas</h2>
+            <h2 className="text-center text-2xl mb-4 text-black">Selecciona el rango de duración de las películas</h2>
+            <hr />
+            <br />
             <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="minDuration">
                     Duración mínima
