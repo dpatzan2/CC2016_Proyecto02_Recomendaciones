@@ -1,13 +1,13 @@
 'use client';
 
+import HomePage from "@/components/landing/HomePage";
+
 
 
 
 export default function Home() {
 
   return (
-    <div>
-     
-    </div>
+    <HomePage/>
   );
 }
