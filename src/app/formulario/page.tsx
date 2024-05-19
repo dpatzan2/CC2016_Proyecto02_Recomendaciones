@@ -6,10 +6,22 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Formulario() {
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
+    const router = useRouter();
+    console.log("Usuario en Formulario:", user);
+
+    useEffect(() => {
+        if (!loading && !user) {
+            router.push('/auth/singin');
+        }
+    }, [user, loading, router]);
+
+    if (loading) {
+        return <div>Loading...</div>; 
+    }
 
     if (!user) {
-        return <p>Loading...</p>; // O redirigir a una página de carga
+        return null; 
     }
 
     return <PhaseWrapper />;

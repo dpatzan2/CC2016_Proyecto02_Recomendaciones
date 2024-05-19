@@ -19,7 +19,7 @@ export default function LoginPage() {
 
         if (result.token) {
             login(result.token); // Llamar a login para almacenar el token y actualizar el estado global
-            router.push('/'); // Redirigir a la página principal u otra página protegida
+            router.push('/formulario'); // Redirigir a la página principal u otra página protegida
         } else {
             setError(result.error);
         }

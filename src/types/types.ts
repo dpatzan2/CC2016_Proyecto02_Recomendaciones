@@ -58,9 +58,10 @@ export interface Phase3Props {
     onNext: (durationRange: { min: string; max: string }) => void;
 }
 
+// types.ts
 export interface Phase4Props {
     onPrevious: () => void;
-    onSubmit: () => void;
+    onSubmit: (yearRange: { min: number; max: number }) => void;
 }
 
 export interface ImageInputProps {
@@ -75,3 +76,9 @@ export interface User {
     password: string;
 }
 
+export interface AuthContextType {
+    user: string | null;
+    login: (token: string) => void;
+    logout: () => void;
+    loading: boolean;
+}

@@ -7,6 +7,7 @@ import Phase2 from "./Phase2";
 import { getAllActors } from "@/controllers/actors.controller";
 import Phase3 from "./Phase3";
 import Phase4 from "./Phase4";
+import { useAuth } from "@/context/AuthContext";
 
 export default function PhaseWrapper() {
     const [currentPhase, setCurrentPhase] = useState<number>(1);
@@ -15,6 +16,9 @@ export default function PhaseWrapper() {
     const [phase1Cards, setPhase1Cards] = useState<number[]>([]);
     const [phase2Cards, setPhase2Cards] = useState<number[]>([]);
     const [durationRange, setDurationRange] = useState<{ min: string; max: string }>({ min: "", max: "" });
+    const [yearRange, setYearRange] = useState<{ min: number; max: number }>({ min: 2020, max: 2022 });
+
+    const { logout } = useAuth();
 
     useEffect(() => {
         async function fetchData() {
@@ -35,20 +39,26 @@ export default function PhaseWrapper() {
         setCurrentPhase(currentPhase - 1);
     }
 
-
     const handleDurationRangeSelected = (range: { min: string; max: string }) => {
         setDurationRange(range);
+        handleNextPhase();
+    }
+
+    const handleYearRangeSelected = (range: { min: number; max: number }) => {
+        setYearRange(range);
         handleNextPhase();
     }
 
     const handleFinalSubmit = () => {
         console.log('Phase 1 Cards:', phase1Cards);
         console.log('Phase 2 Cards:', phase2Cards);
-        alert(`Selected cards:\nPhase 1: ${phase1Cards.join(', ')}\nPhase 2: ${phase2Cards.join(', ')}\nPhase 3: ${durationRange.min} ${durationRange.max}`);
+        console.log('Duration Range:', durationRange);
+        console.log('Year Range:', yearRange);
+        alert(`Selected cards:\nPhase 1: ${phase1Cards.join(', ')}\nPhase 2: ${phase2Cards.join(', ')}\nPhase 3: ${durationRange.min} ${durationRange.max}\nPhase 4: ${yearRange.min} ${yearRange.max}`);
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-300">
+        <div className="flex items-center justify-center min-h-screen bg-gray-300 relative">
             <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl" style={{ minHeight: '80vh', borderRadius: '50px' }}>
                 <form>
                     {currentPhase === 1 && (
@@ -82,6 +92,12 @@ export default function PhaseWrapper() {
                     )}
                 </form>
             </div>
+            <button
+                onClick={logout}
+                className="fixed bottom-4 right-4 bg-red-500 text-white p-4 rounded-full shadow-lg hover:bg-red-700 transition duration-300"
+            >
+                Logout
+            </button>
         </div>
     );
 }

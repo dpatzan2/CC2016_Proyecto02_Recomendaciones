@@ -4,22 +4,17 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import * as JWT from 'jwt-decode';
 import Cookies from 'js-cookie';
-
-interface AuthContextType {
-    user: string | null;
-    login: (token: string) => void;
-    logout: () => void;
-}
+import { AuthContextType } from '@/types/types';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
     const router = useRouter();
 
     useEffect(() => {
         const token = Cookies.get('token');
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
         console.log("Token encontrado:", token);
 
         if (token) {
@@ -36,6 +31,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } else {
             router.push('/auth/singin');
         }
+        setLoading(false);
     }, [router]);
 
     const login = (token: string) => {
@@ -53,7 +49,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, login, logout, loading }}>
             {children}
         </AuthContext.Provider>
     );
