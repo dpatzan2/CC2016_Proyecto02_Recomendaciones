@@ -9,6 +9,7 @@ import Phase3 from "./Phase3";
 import Phase4 from "./Phase4";
 import { useAuth } from "@/context/AuthContext";
 import { getAllMovies, getFilteredMovies } from "@/controllers/movies/movies.controller";
+import { useRouter } from "next/navigation";
 
 export default function PhaseWrapper() {
     const [currentPhase, setCurrentPhase] = useState<number>(1);
@@ -19,6 +20,7 @@ export default function PhaseWrapper() {
     const [durationRange, setDurationRange] = useState<{ min: string; max: string }>({ min: "", max: "" });
     const [yearRange, setYearRange] = useState<{ min: number; max: number }>({ min: 2000, max: 2024 });
     const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
+    const router = useRouter();
 
 
     const { logout } = useAuth();
@@ -65,7 +67,7 @@ export default function PhaseWrapper() {
              const movies = await getFilteredMovies(preferences);
              setFilteredMovies(movies)
              console.log('Filtered Movies:', movies);
-
+             router.push('/results');
              
         } catch (error) {
             console.error("Error filtering movies:", error);
@@ -75,7 +77,7 @@ export default function PhaseWrapper() {
     
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-300 relative">
+        <div className="flex items-center justify-center min-h-screen bg-page relative">
             <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl" style={{ minHeight: '80vh', borderRadius: '50px' }}>
                 <form>
                     {currentPhase === 1 && (
