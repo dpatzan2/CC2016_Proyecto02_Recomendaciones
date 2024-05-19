@@ -12,7 +12,7 @@ export async function middleware(request: NextRequest) {
 
     if (!token) {
         console.log("Token no encontrado");
-        return NextResponse.redirect(new URL('/auth/singin', request.url));
+        return NextResponse.redirect(new URL('/', request.url));
     }
 
     console.log("Token recibido:", token);
@@ -24,7 +24,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next();
     } catch (error) {
         console.error("Error al verificar el token:", error);
-        return NextResponse.redirect(new URL('/auth/singin', request.url));
+        return NextResponse.redirect(new URL('/', request.url));
     }
 }
 

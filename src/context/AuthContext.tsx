@@ -26,10 +26,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 console.error("Error decodificando el token:", error);
                 Cookies.remove('token');
                 setUser(null);
-                router.push('/auth/singin');
+                router.push('/');
             }
         } else {
-            router.push('/auth/singin');
+            router.push('/');
         }
         setLoading(false);
     }, [router]);
