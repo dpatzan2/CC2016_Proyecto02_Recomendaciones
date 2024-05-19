@@ -72,7 +72,7 @@ export default function Phase4({ onPrevious, onSubmit }: Phase4Props) {
                     className="bg-blue-500 text-white py-2 px-4 rounded"
                     onClick={() => onSubmit(yearRange)}
                 >
-                    Siguiente Fase
+                    Enviar
                 </button>
             </div>
         </div>
