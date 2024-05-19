@@ -1,22 +1,23 @@
 'use client'
 import { useEffect, useState } from "react";
 import { getAllCountries } from "@/controllers/countries.controller";
-import { Actors, Country } from "@/types/types";
+import { Actors, Country, Movie, UserPreferences } from "@/types/types";
 import Phase1 from "./Phase1";
 import Phase2 from "./Phase2";
 import { getAllActors } from "@/controllers/actors.controller";
 import Phase3 from "./Phase3";
 import Phase4 from "./Phase4";
 import { useAuth } from "@/context/AuthContext";
+import { getAllMovies, getFilteredMovies } from "@/controllers/movies/movies.controller";
 
 export default function PhaseWrapper() {
     const [currentPhase, setCurrentPhase] = useState<number>(1);
     const [countries, setCountries] = useState<Country[]>([]);
     const [actors, setActors] = useState<Actors[]>([]);
-    const [phase1Cards, setPhase1Cards] = useState<number[]>([]);
-    const [phase2Cards, setPhase2Cards] = useState<number[]>([]);
+    const [phase1Cards, setPhase1Cards] = useState<string[]>([]); // Cambio a string[]
+    const [phase2Cards, setPhase2Cards] = useState<string[]>([]); // Cambio a string[]
     const [durationRange, setDurationRange] = useState<{ min: string; max: string }>({ min: "", max: "" });
-    const [yearRange, setYearRange] = useState<{ min: number; max: number }>({ min: 2020, max: 2022 });
+    const [yearRange, setYearRange] = useState<{ min: number; max: number }>({ min: 2000, max: 2024 });
 
     const { logout } = useAuth();
 
@@ -49,12 +50,22 @@ export default function PhaseWrapper() {
         handleNextPhase();
     }
 
-    const handleFinalSubmit = () => {
-        console.log('Phase 1 Cards:', phase1Cards);
-        console.log('Phase 2 Cards:', phase2Cards);
-        console.log('Duration Range:', durationRange);
-        console.log('Year Range:', yearRange);
-        alert(`Selected cards:\nPhase 1: ${phase1Cards.join(', ')}\nPhase 2: ${phase2Cards.join(', ')}\nPhase 3: ${durationRange.min} ${durationRange.max}\nPhase 4: ${yearRange.min} ${yearRange.max}`);
+    const handleFinalSubmit = async () => {
+        const preferences: UserPreferences = {
+            preferredCountries: phase1Cards,
+            preferredActors: phase2Cards,
+            durationRange: { min: durationRange.min, max: durationRange.max },
+            releaseYearRange: { min: yearRange.min, max: yearRange.max },
+        };
+
+        try {
+            //const movies = await getFilteredMovies(preferences);
+            const movies = await getAllMovies();
+            console.log('Filtered Movies:', movies);
+            //alert(`Selected cards:\nPhase 1: ${phase1Cards.join(', ')}\nPhase 2: ${phase2Cards.join(', ')}\nPhase 3: ${durationRange.min} ${durationRange.max}\nPhase 4: ${yearRange.min} ${yearRange.max}\nFiltered Movies: ${movies?.map(movie => movie.title).join(', ')}`);
+        } catch (error) {
+            console.error("Error filtering movies:", error);
+        }
     }
 
     return (

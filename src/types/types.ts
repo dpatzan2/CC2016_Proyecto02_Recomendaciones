@@ -33,24 +33,25 @@ export interface ReleaseYearRange {
 }
 
 export interface UserPreferences {
-    preferredCountries: number[];
-    preferredActors: number[];
-    durationRange: DurationRange;
-    releaseYearRange: ReleaseYearRange;
+    preferredCountries: string[]; 
+    preferredActors: string[];    
+    durationRange: { min: string; max: string };
+    releaseYearRange: { min: number; max: number };
 }
 
 export interface Phase1Props {
     countries: Country[];
     onNext: () => void;
-    onCardsSelected: (selectedCards: number[]) => void;
+    onCardsSelected: (selectedCards: string[]) => void; 
 }
 
 export interface Phase2Props {
     actors: Actors[];
     onNext: () => void;
     onPrevious: () => void;
-    onCardsSelected: (selectedCards: number[]) => void;
+    onCardsSelected: (selectedCards: string[]) => void; 
 }
+
 
 
 export interface Phase3Props {

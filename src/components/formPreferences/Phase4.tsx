@@ -1,5 +1,4 @@
 // Phase4.tsx
-
 import { Phase4Props } from "@/types/types";
 import { useState } from "react";
 import { Range, getTrackBackground } from "react-range";
@@ -61,7 +60,7 @@ export default function Phase4({ onPrevious, onSubmit }: Phase4Props) {
                 </div>
             </div>
             <div className="flex justify-between pt-10">
-            <button
+                <button
                     type="button"
                     className="bg-gray-500 text-white py-2 px-4 rounded"
                     onClick={onPrevious}
@@ -73,7 +72,7 @@ export default function Phase4({ onPrevious, onSubmit }: Phase4Props) {
                     className="bg-blue-500 text-white py-2 px-4 rounded"
                     onClick={() => onSubmit(yearRange)}
                 >
-                    Enviar
+                    Siguiente Fase
                 </button>
             </div>
         </div>

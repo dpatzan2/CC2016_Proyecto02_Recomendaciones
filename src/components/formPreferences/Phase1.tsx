@@ -3,10 +3,8 @@ import ImageInput from "@/components/inputSeleccion";
 import { Country, Phase1Props } from "@/types/types";
 import { useState, useEffect } from "react";
 
-
-
 export default function Phase1({ countries, onNext, onCardsSelected }: Phase1Props) {
-    const [selectedCards, setSelectedCards] = useState<number[]>([]);
+    const [selectedCards, setSelectedCards] = useState<string[]>([]); // Cambio a string[]
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -19,9 +17,9 @@ export default function Phase1({ countries, onNext, onCardsSelected }: Phase1Pro
     const totalPages = Math.ceil(filteredCards.length / itemsPerPage);
     const displayedCards = filteredCards.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-    const handleCardClick = (id: number) => {
+    const handleCardClick = (countryName: string) => {
         setSelectedCards(prevSelected =>
-            prevSelected.includes(id) ? prevSelected.filter(cardId => cardId !== id) : [...prevSelected, id]
+            prevSelected.includes(countryName) ? prevSelected.filter(name => name !== countryName) : [...prevSelected, countryName]
         );
     }
 
@@ -42,7 +40,7 @@ export default function Phase1({ countries, onNext, onCardsSelected }: Phase1Pro
                 <input
                     type="text"
                     placeholder="Buscar"
-                    className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500  text-black"
+                    className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -53,8 +51,8 @@ export default function Phase1({ countries, onNext, onCardsSelected }: Phase1Pro
                         key={country.id}
                         title={country.countryName}
                         image='https://via.placeholder.com/150'
-                        selected={selectedCards.includes(Number(country.id))}
-                        onClick={() => handleCardClick(Number(country.id))}
+                        selected={selectedCards.includes(country.countryName)}
+                        onClick={() => handleCardClick(country.countryName)}
                     />
                 ))}
             </div>

@@ -3,10 +3,8 @@ import { Phase2Props } from "@/types/types";
 import { useState, useEffect } from "react";
 import ImageInput from "../inputSeleccion";
 
-
-
 export default function Phase2({ actors, onNext, onPrevious, onCardsSelected }: Phase2Props) {
-    const [selectedCards, setSelectedCards] = useState<number[]>([]);
+    const [selectedCards, setSelectedCards] = useState<string[]>([]); // Cambio a string[]
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -15,13 +13,13 @@ export default function Phase2({ actors, onNext, onPrevious, onCardsSelected }: 
     }, [selectedCards, onCardsSelected]);
 
     const itemsPerPage = 9;
-    const filteredCards = actors.filter(actors => actors.completeName.toLowerCase().includes(searchTerm.toLowerCase()));
+    const filteredCards = actors.filter(actor => actor.completeName.toLowerCase().includes(searchTerm.toLowerCase()));
     const totalPages = Math.ceil(filteredCards.length / itemsPerPage);
     const displayedCards = filteredCards.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-    const handleCardClick = (id: number) => {
+    const handleCardClick = (completeName: string) => {
         setSelectedCards(prevSelected =>
-            prevSelected.includes(id) ? prevSelected.filter(cardId => cardId !== id) : [...prevSelected, id]
+            prevSelected.includes(completeName) ? prevSelected.filter(name => name !== completeName) : [...prevSelected, completeName]
         );
     }
 
@@ -48,13 +46,13 @@ export default function Phase2({ actors, onNext, onPrevious, onCardsSelected }: 
                 />
             </div>
             <div className="grid grid-cols-3 gap-4 mb-4">
-                {displayedCards.map(actors => (
+                {displayedCards.map(actor => (
                     <ImageInput
-                        key={actors.id}
-                        title={actors.completeName}
+                        key={actor.id}
+                        title={actor.completeName}
                         image='https://via.placeholder.com/150'
-                        selected={selectedCards.includes(Number(actors.id))}
-                        onClick={() => handleCardClick(Number(actors.id))}
+                        selected={selectedCards.includes(actor.completeName)}
+                        onClick={() => handleCardClick(actor.completeName)}
                     />
                 ))}
             </div>

@@ -23,55 +23,47 @@ export const getAllMovies = async () => {
 }
 
 
-  export const filterMovies = async (preferences: UserPreferences): Promise<Movie[] | undefined> => {
-      const { preferredCountries, preferredActors, durationRange, releaseYearRange } = preferences;
-  
-      const minDuration = durationToSeconds(durationRange.min);
-      const maxDuration = durationToSeconds(durationRange.max);
-  
-      try {
-          const driver = await connectionDB();
-          const session = driver.session();
-  
-          const query = `
-              MATCH (m:Movie)
-              WHERE m.year >= $minYear AND m.year <= $maxYear
-              AND toFloat(split(m.duration, ':')[0]) * 3600 + toFloat(split(m.duration, ':')[1]) * 60 + toFloat(split(m.duration, ':')[2]) >= $minDuration
-              AND toFloat(split(m.duration, ':')[0]) * 3600 + toFloat(split(m.duration, ':')[1]) * 60 + toFloat(split(m.duration, ':')[2]) <= $maxDuration
-              AND (m.countryOrigin IN $preferredCountries)
-              AND EXISTS {
-                  MATCH (a:Actor)
-                  WHERE (a.completeName = m.principalActors__001 OR a.completeName = m.principalActors__002)
-                  AND a.id IN $preferredActors
-              }
-              RETURN m
-          `;
-  
-          const result = await session.run(query, {
-              minYear: releaseYearRange.min,
-              maxYear: releaseYearRange.max,
-              minDuration,
-              maxDuration,
-              preferredCountries,
-              preferredActors
-          });
-  
-          session.close();
-  
-          return result.records.map((record: any) => {
-              const movie = record.get('m').properties;
-              return {
-                  duration: movie.duration,
-                  year: movie.year.toNumber(),
-                  genres: [movie.genres__001, movie.genres__002].filter(Boolean),
-                  releaseDate: movie.releaseDate,
-                  principalActors: [movie.principalActors__001, movie.principalActors__002].filter(Boolean),
-                  id: movie.id.toNumber(),
-                  countryOrigin: movie.countryOrigin,
-                  title: movie.title,
-              } as Movie;
-          });
-      } catch (error) {
-          console.log(error);
-      }
-  }
+export const getFilteredMovies = async (preferences: UserPreferences): Promise<Movie[]> => {
+    try {
+        const driver = await connectionDB();
+        const session = driver.session();
+        const { preferredCountries, preferredActors, durationRange, releaseYearRange } = preferences;
+
+        const result = await session.run(`
+            MATCH (m:Movies)
+            WHERE m.countryOrigin IN $preferredCountries
+              AND (m.principalActors__001 IN $preferredActors OR m.principalActors__002 IN $preferredActors)
+              AND m.year >= $releaseYearRangeMin AND m.year <= $releaseYearRangeMax
+              AND toFloat(split(m.duration, ':')[0]) * 60 + toFloat(split(m.duration, ':')[1]) >= $durationRangeMin
+              AND toFloat(split(m.duration, ':')[0]) * 60 + toFloat(split(m.duration, ':')[1]) <= $durationRangeMax
+            RETURN m
+        `, {
+            preferredCountries,
+            preferredActors,
+            durationRangeMin: durationRange.min,
+            durationRangeMax: durationRange.max,
+            releaseYearRangeMin: releaseYearRange.min,
+            releaseYearRangeMax: releaseYearRange.max,
+        });
+
+        const movies = result.records.map((record: any) => {
+            const movie = record.get('m').properties;
+            return {
+                title: movie.title,
+                duration: movie.duration,
+                year: movie.year,
+                genres: [movie.genres__001, movie.genres__002],
+                releaseDate: movie.releaseDate,
+                principalActors: [movie.principalActors__001, movie.principalActors__002],
+                id: movie.id,
+                countryOrigin: movie.countryOrigin,
+            };
+        });
+
+        session.close();
+        return movies;
+    } catch (error) {
+        console.error('Error fetching filtered movies:', error);
+        throw error;
+    }
+};
