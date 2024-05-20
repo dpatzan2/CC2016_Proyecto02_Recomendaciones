@@ -6,6 +6,12 @@ export interface Actors {
     picture: string;
 }
 
+export interface Genders {
+    id: string;
+    name: string;
+    imageURL: string;
+}
+
 export interface Country {
     id: string;
     countryName: string;
@@ -36,7 +42,7 @@ export interface ReleaseYearRange {
 export interface UserPreferences {
     preferredCountries: string[]; 
     preferredActors: string[];    
-    durationRange: { min: string; max: string };
+    preferredGenders: string[]; 
     releaseYearRange: { min: number; max: number };
 }
 
@@ -53,12 +59,14 @@ export interface Phase2Props {
     onCardsSelected: (selectedCards: string[]) => void; 
 }
 
-
-
 export interface Phase3Props {
+    genders: Genders[];
+    onNext: () => void;
     onPrevious: () => void;
-    onNext: (durationRange: { min: string; max: string }) => void;
+    onCardsSelected: (selectedCards: string[]) => void; 
 }
+
+
 
 // types.ts
 export interface Phase4Props {

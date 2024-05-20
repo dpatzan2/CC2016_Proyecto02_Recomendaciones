@@ -23,21 +23,18 @@ export const getFilteredMovies = async (preferences: UserPreferences): Promise<M
     try {
         const driver = await connectionDB();
         const session = driver.session();
-        const { preferredCountries, preferredActors, durationRange, releaseYearRange } = preferences;
+        const { preferredCountries, preferredActors, preferredGenders, releaseYearRange } = preferences;
 
         const result = await session.run(`
             MATCH (m:Movies)
             WHERE m.countryOrigin IN $preferredCountries
               OR (m.principalActors__001 IN $preferredActors OR m.principalActors__002 IN $preferredActors)
-              OR m.year >= $releaseYearRangeMin AND m.year <= $releaseYearRangeMax
-              OR toFloat(split(m.duration, ':')[0]) * 60 + toFloat(split(m.duration, ':')[1]) >= $durationRangeMin
-              OR toFloat(split(m.duration, ':')[0]) * 60 + toFloat(split(m.duration, ':')[1]) <= $durationRangeMax
+              OR (m.genres__001 IN $preferredGenders OR m.genres__002 IN $preferredGenders)
             RETURN m
         `, {
             preferredCountries,
             preferredActors,
-            durationRangeMin: durationRange.min,
-            durationRangeMax: durationRange.max,
+            preferredGenders,
             releaseYearRangeMin: releaseYearRange.min,
             releaseYearRangeMax: releaseYearRange.max,
         });

@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import { getAllCountries } from "@/controllers/countries.controller";
-import { Actors, Country, Movie, UserPreferences } from "@/types/types";
+import { Actors, Country, Genders, Movie, UserPreferences } from "@/types/types";
 import Phase1 from "./Phase1";
 import Phase2 from "./Phase2";
 import { getAllActors } from "@/controllers/actors.controller";
@@ -10,13 +10,16 @@ import Phase4 from "./Phase4";
 import { useAuth } from "@/context/AuthContext";
 import { getAllMovies, getFilteredMovies } from "@/controllers/movies/movies.controller";
 import { useRouter } from "next/navigation";
+import { getAllGenders } from "@/controllers/genders.controller";
 
 export default function PhaseWrapper() {
     const [currentPhase, setCurrentPhase] = useState<number>(1);
     const [countries, setCountries] = useState<Country[]>([]);
     const [actors, setActors] = useState<Actors[]>([]);
+    const [genders, setGenders] = useState<Genders[]>([]);
     const [phase1Cards, setPhase1Cards] = useState<string[]>([]);
     const [phase2Cards, setPhase2Cards] = useState<string[]>([]); 
+    const [phase3Cards, setPhase3Cards] = useState<string[]>([]); 
     const [durationRange, setDurationRange] = useState<{ min: string; max: string }>({ min: "", max: "" });
     const [yearRange, setYearRange] = useState<{ min: number; max: number }>({ min: 2000, max: 2024 });
     const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
@@ -32,6 +35,9 @@ export default function PhaseWrapper() {
             const userDataActors = await getAllActors();
             console.log(userDataActors)
             setActors(userDataActors);
+            const userDataGenders = await getAllGenders();
+            setGenders(userDataGenders);
+            console.log(userDataGenders)
         }
         fetchData();
     }, []);
@@ -59,7 +65,7 @@ export default function PhaseWrapper() {
         const preferences: UserPreferences = {
             preferredCountries: phase1Cards,
             preferredActors: phase2Cards,
-            durationRange: { min: durationRange.min, max: durationRange.max },
+            preferredGenders: phase3Cards,
             releaseYearRange: { min: yearRange.min, max: yearRange.max },
         };
 
@@ -67,7 +73,7 @@ export default function PhaseWrapper() {
              const movies = await getFilteredMovies(preferences);
              setFilteredMovies(movies)
              console.log('Filtered Movies:', movies);
-             router.push('/ResultsPage');
+             //router.push('/ResultsPage');
              
         } catch (error) {
             console.error("Error filtering movies:", error);
@@ -98,9 +104,11 @@ export default function PhaseWrapper() {
 
                     {currentPhase === 3 && (
                         <Phase3
-                            onPrevious={handlePreviousPhase}
-                            onNext={handleDurationRangeSelected}
-                        />
+                        genders={genders}
+                        onNext={handleNextPhase}
+                        onPrevious={handlePreviousPhase}
+                        onCardsSelected={setPhase3Cards}
+                    />
                     )}
 
                     {currentPhase === 4 && (
