@@ -19,19 +19,34 @@ export const getAllMovies = async () => {
 }
 
 
-export const getFilteredMovies = async (preferences: UserPreferences): Promise<Movie[]> => {
+export const getFilteredMovies = async (preferences: UserPreferences, query:number): Promise<Movie[]> => {
     try {
         const driver = await connectionDB();
         const session = driver.session();
+        let queryData = "";
+
         const { preferredCountries, preferredActors, preferredGenders, releaseYearRange } = preferences;
 
-        const result = await session.run(`
+        if(query == 1){
+            queryData = `
+            MATCH (m:Movies)
+            WHERE m.countryOrigin IN $preferredCountries
+              AND (m.principalActors__001 IN $preferredActors OR m.principalActors__002 IN $preferredActors)
+              AND (m.genres__001 IN $preferredGenders OR m.genres__002 IN $preferredGenders)
+            RETURN m
+        `
+        } else if(query == 2){
+            queryData = `
             MATCH (m:Movies)
             WHERE m.countryOrigin IN $preferredCountries
               OR (m.principalActors__001 IN $preferredActors OR m.principalActors__002 IN $preferredActors)
-              OR (m.genres__001 IN $preferredGenders OR m.genres__002 IN $preferredGenders)
+              AND (m.genres__001 IN $preferredGenders OR m.genres__002 IN $preferredGenders)
             RETURN m
-        `, {
+            LIMIT 50
+        `
+        }
+
+        const result = await session.run(queryData, {
             preferredCountries,
             preferredActors,
             preferredGenders,

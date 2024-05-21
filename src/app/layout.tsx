@@ -1,7 +1,9 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from '../context/AuthContext';
+import { FilteredMoviesProvider } from '../context/FilteredMoviesContext';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +20,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <FilteredMoviesProvider>
+            {children}
+          </FilteredMoviesProvider>
+        </AuthProvider>
       </body>
     </html>
   );

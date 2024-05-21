@@ -1,4 +1,5 @@
-'use client'
+// PhaseWrapper.tsx
+'use client';
 import { useEffect, useState } from "react";
 import { getAllCountries } from "@/controllers/countries.controller";
 import { Actors, Country, Genders, Movie, UserPreferences } from "@/types/types";
@@ -8,9 +9,10 @@ import { getAllActors } from "@/controllers/actors.controller";
 import Phase3 from "./Phase3";
 import Phase4 from "./Phase4";
 import { useAuth } from "@/context/AuthContext";
-import { getAllMovies, getFilteredMovies } from "@/controllers/movies/movies.controller";
+import { getFilteredMovies } from "@/controllers/movies/movies.controller";
 import { useRouter } from "next/navigation";
 import { getAllGenders } from "@/controllers/genders.controller";
+import { useFilteredMovies } from '@/context/FilteredMoviesContext';
 
 export default function PhaseWrapper() {
     const [currentPhase, setCurrentPhase] = useState<number>(1);
@@ -22,9 +24,8 @@ export default function PhaseWrapper() {
     const [phase3Cards, setPhase3Cards] = useState<string[]>([]); 
     const [durationRange, setDurationRange] = useState<{ min: string; max: string }>({ min: "", max: "" });
     const [yearRange, setYearRange] = useState<{ min: number; max: number }>({ min: 2000, max: 2024 });
-    const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
+    const { setFilteredMovies, setFilteredMoviesRelated } = useFilteredMovies();
     const router = useRouter();
-
 
     const { logout } = useAuth();
 
@@ -50,11 +51,6 @@ export default function PhaseWrapper() {
         setCurrentPhase(currentPhase - 1);
     }
 
-    const handleDurationRangeSelected = (range: { min: string; max: string }) => {
-        setDurationRange(range);
-        handleNextPhase();
-    }
-
     const handleYearRangeSelected = (range: { min: number; max: number }) => {
         setYearRange(range);
         handleNextPhase();
@@ -70,17 +66,18 @@ export default function PhaseWrapper() {
         };
 
         try {
-             const movies = await getFilteredMovies(preferences);
-             setFilteredMovies(movies)
+             const movies = await getFilteredMovies(preferences, 1);
+             setFilteredMovies(movies);
              console.log('Filtered Movies:', movies);
-             //router.push('/ResultsPage');
+             router.push('/resultsPage');
+             
+             const moviesRelated = await getFilteredMovies(preferences, 2);
+             setFilteredMoviesRelated(moviesRelated);
              
         } catch (error) {
             console.error("Error filtering movies:", error);
         }
     }
-
-    
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-page relative">
