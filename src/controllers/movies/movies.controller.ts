@@ -40,7 +40,7 @@ export const getFilteredMovies = async (preferences: UserPreferences, query:numb
             MATCH (m:Movies)
             WHERE m.countryOrigin IN $preferredCountries
               OR (m.principalActors__001 IN $preferredActors OR m.principalActors__002 IN $preferredActors)
-              AND (m.genres__001 IN $preferredGenders OR m.genres__002 IN $preferredGenders)
+              OR (m.genres__001 IN $preferredGenders OR m.genres__002 IN $preferredGenders)
             RETURN m
             LIMIT 50
         `
