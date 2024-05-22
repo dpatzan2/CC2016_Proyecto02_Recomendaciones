@@ -1,4 +1,4 @@
-// context/FilteredMoviesContext.tsx
+
 'use client';
 import { createContext, useContext, useState, ReactNode } from 'react';
 import { Movie } from '@/types/types';

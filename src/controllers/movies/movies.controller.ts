@@ -65,6 +65,7 @@ export const getFilteredMovies = async (preferences: UserPreferences, query:numb
                 principalActors: [movie.principalActors__001, movie.principalActors__002],
                 id: movie.id,
                 countryOrigin: movie.countryOrigin,
+                posterURL: movie.posterURL
             };
         });
 

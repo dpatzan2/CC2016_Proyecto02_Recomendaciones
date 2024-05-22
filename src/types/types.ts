@@ -17,17 +17,19 @@ export interface Country {
     countryName: string;
     banner: string;
 }
-
+// types/types.ts
 export interface Movie {
-    duration: string;
-    year: number;
-    genres: string[];
-    releaseDate: string;
-    principalActors: string[];
-    id: number;
-    countryOrigin: string;
+    id: { low: number; high: number };
     title: string;
+    posterURL: string;
+    duration: string;
+    year: { low: number; high: number };
+    genres: string[];
+    releaseDate: { year: { low: number; high: number }; month: { low: number; high: number }; day: { low: number; high: number }; hour: { low: number; high: number }; minute: { low: number; high: number } };
+    countryOrigin: string;
+    principalActors: string[];
 }
+
 
 export interface DurationRange {
     min: string;
@@ -40,30 +42,30 @@ export interface ReleaseYearRange {
 }
 
 export interface UserPreferences {
-    preferredCountries: string[]; 
-    preferredActors: string[];    
-    preferredGenders: string[]; 
+    preferredCountries: string[];
+    preferredActors: string[];
+    preferredGenders: string[];
     releaseYearRange: { min: number; max: number };
 }
 
 export interface Phase1Props {
     countries: Country[];
     onNext: () => void;
-    onCardsSelected: (selectedCards: string[]) => void; 
+    onCardsSelected: (selectedCards: string[]) => void;
 }
 
 export interface Phase2Props {
     actors: Actors[];
     onNext: () => void;
     onPrevious: () => void;
-    onCardsSelected: (selectedCards: string[]) => void; 
+    onCardsSelected: (selectedCards: string[]) => void;
 }
 
 export interface Phase3Props {
     genders: Genders[];
     onNext: () => void;
     onPrevious: () => void;
-    onCardsSelected: (selectedCards: string[]) => void; 
+    onCardsSelected: (selectedCards: string[]) => void;
 }
 
 
@@ -97,4 +99,9 @@ export interface AuthContextType {
 export interface UserLogged {
     id: number;
     username: string;
+}
+
+export interface MovieCardProps {
+    movie: Movie;
+    onClick: () => void;
 }
