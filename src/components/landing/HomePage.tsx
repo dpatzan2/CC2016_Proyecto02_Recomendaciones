@@ -15,7 +15,7 @@ export default function HomePage (){
             </section>
             <section className="bg-gray-50 dark:bg-gray-900 min-h-screen flex flex-col justify-center items-center">
                 <div className="text-center mb-8">
-                    <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Bienvenido a </h1>
+                    <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Bienvenido a MovieMate</h1>
                     <p className="text-gray-600 dark:text-gray-400 mt-2">
                         Tu portal de recomendaciones personalizadas de películas
                     </p>

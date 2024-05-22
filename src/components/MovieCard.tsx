@@ -7,8 +7,8 @@ export default function MovieCard({ movie, onClick }: MovieCardProps) {
 
   const formatID = (id: { low: number; high: number }) => id.low; 
   const formatYear = (year: { low: number; high: number }) => year.low; 
-  const formatReleaseDate = (date: { year: { low: number; high: number }; month: { low: number; high: number }; day: { low: number; high: number }; hour: { low: number; high: number }; minute: { low: number; high: number } }) => 
-    `${date.year.low}-${date.month.low}-${date.day.low} ${date.hour.low}:${date.minute.low}`;
+  const formatReleaseDate = (date: { year: { low: number; high: number }; month: { low: number; high: number }; day: { low: number; high: number }}) => 
+    `${date.year.low}-${date.month.low}-${date.day.low}`;
 
   return (
     <div

@@ -25,6 +25,7 @@ export default function RegisterPage() {
             setError(result.error);
         } else {
             setSuccess('User registered successfully');
+            router.push('/auth/singin');
         }
     };
 

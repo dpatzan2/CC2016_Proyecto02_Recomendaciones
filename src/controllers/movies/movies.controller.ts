@@ -23,51 +23,95 @@ export const getFilteredMovies = async (preferences: UserPreferences, query:numb
     try {
         const driver = await connectionDB();
         const session = driver.session();
-        let queryData = "";
+        let movies: Movie[] = [];
 
         const { preferredCountries, preferredActors, preferredGenders, releaseYearRange } = preferences;
 
-        if(query == 1){
-            queryData = `
-            MATCH (m:Movies)
-            WHERE m.countryOrigin IN $preferredCountries
-              AND (m.principalActors__001 IN $preferredActors OR m.principalActors__002 IN $preferredActors)
-              AND (m.genres__001 IN $preferredGenders OR m.genres__002 IN $preferredGenders)
-            RETURN m
-        `
-        } else if(query == 2){
-            queryData = `
-            MATCH (m:Movies)
-            WHERE m.countryOrigin IN $preferredCountries
-              OR (m.principalActors__001 IN $preferredActors OR m.principalActors__002 IN $preferredActors)
-              OR (m.genres__001 IN $preferredGenders OR m.genres__002 IN $preferredGenders)
-            RETURN m
-            LIMIT 50
-        `
+        const countryFilter = preferredCountries.length > 0 ? "m.countryOrigin IN $preferredCountries" : "true";
+        const actorsFilter = preferredActors.length > 0 ? "(m.principalActors__001 IN $preferredActors OR m.principalActors__002 IN $preferredActors)" : "true";
+        const gendersFilter = preferredGenders.length > 0 ? "(m.genres__001 IN $preferredGenders OR m.genres__002 IN $preferredGenders)" : "true";
+
+        const runQuery = async (filters: string): Promise<Movie[]> => {
+            const queryData = `
+                MATCH (m:Movies)
+                WHERE ${filters}
+                RETURN m
+            `;
+
+            const result = await session.run(queryData, {
+                preferredCountries,
+                preferredActors,
+                preferredGenders,
+                releaseYearRangeMin: releaseYearRange.min,
+                releaseYearRangeMax: releaseYearRange.max,
+            });
+
+            return result.records.map((record: any) => {
+                const movie = record.get('m').properties;
+                return {
+                    title: movie.title,
+                    duration: movie.duration,
+                    year: movie.year,
+                    genres: [movie.genres__001, movie.genres__002],
+                    releaseDate: movie.releaseDate,
+                    principalActors: [movie.principalActors__001, movie.principalActors__002],
+                    id: movie.id,
+                    countryOrigin: movie.countryOrigin,
+                    posterURL: movie.posterURL
+                };
+            });
+        };
+
+        if (query == 1) {
+            movies = await runQuery(`${countryFilter} AND ${actorsFilter} AND ${gendersFilter}`);
+
+            if (movies.length === 0) {
+                const filterCombinations = [
+                    `${countryFilter} AND ${actorsFilter}`,
+                    `${countryFilter} AND ${gendersFilter}`,
+                    `${actorsFilter} AND ${gendersFilter}`,
+                ];
+
+                for (const filters of filterCombinations) {
+                    movies = await runQuery(filters);
+                    if (movies.length > 0) {
+                        break;
+                    }
+                }
+            }
+        } else if (query == 2) {
+            const queryData = `
+                MATCH (m:Movies)
+                WHERE ${countryFilter}
+                  OR ${actorsFilter}
+                  OR ${gendersFilter}
+                RETURN m
+                LIMIT 50
+            `;
+
+            const result = await session.run(queryData, {
+                preferredCountries,
+                preferredActors,
+                preferredGenders,
+                releaseYearRangeMin: releaseYearRange.min,
+                releaseYearRangeMax: releaseYearRange.max,
+            });
+
+            movies = result.records.map((record: any) => {
+                const movie = record.get('m').properties;
+                return {
+                    title: movie.title,
+                    duration: movie.duration,
+                    year: movie.year,
+                    genres: [movie.genres__001, movie.genres__002],
+                    releaseDate: movie.releaseDate,
+                    principalActors: [movie.principalActors__001, movie.principalActors__002],
+                    id: movie.id,
+                    countryOrigin: movie.countryOrigin,
+                    posterURL: movie.posterURL
+                };
+            });
         }
-
-        const result = await session.run(queryData, {
-            preferredCountries,
-            preferredActors,
-            preferredGenders,
-            releaseYearRangeMin: releaseYearRange.min,
-            releaseYearRangeMax: releaseYearRange.max,
-        });
-
-        const movies = result.records.map((record: any) => {
-            const movie = record.get('m').properties;
-            return {
-                title: movie.title,
-                duration: movie.duration,
-                year: movie.year,
-                genres: [movie.genres__001, movie.genres__002],
-                releaseDate: movie.releaseDate,
-                principalActors: [movie.principalActors__001, movie.principalActors__002],
-                id: movie.id,
-                countryOrigin: movie.countryOrigin,
-                posterURL: movie.posterURL
-            };
-        });
 
         session.close();
         return movies;
