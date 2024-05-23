@@ -72,7 +72,12 @@ export default function PhaseWrapper() {
              router.push('/resultsPage');
              
              const moviesRelated = await getFilteredMovies(preferences, 2);
-             setFilteredMoviesRelated(moviesRelated);
+             for (let i = moviesRelated.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [moviesRelated[i], moviesRelated[j]] = [moviesRelated[j], moviesRelated[i]];
+            }
+    
+            setFilteredMoviesRelated(moviesRelated);
              
         } catch (error) {
             console.error("Error filtering movies:", error);
