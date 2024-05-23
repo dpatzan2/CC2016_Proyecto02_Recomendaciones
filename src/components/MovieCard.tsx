@@ -1,14 +1,14 @@
 import { MovieCardProps } from '@/types/types';
 
-
-
 export default function MovieCard({ movie, onClick }: MovieCardProps) {
   console.log('Movie:', movie);
 
-  const formatID = (id: { low: number; high: number }) => id.low; 
-  const formatYear = (year: { low: number; high: number }) => year.low; 
+  const formatID = (id: { low: number; high: number }) => (id && id.low) ? id.low : 'N/A'; 
+  const formatYear = (year: { low: number; high: number }) => (year && year.low) ? year.low : 'N/A'; 
   const formatReleaseDate = (date: { year: { low: number; high: number }; month: { low: number; high: number }; day: { low: number; high: number }}) => 
-    `${date.year.low}-${date.month.low}-${date.day.low}`;
+    date && date.year && date.month && date.day ? 
+    `${date.year.low}-${date.month.low}-${date.day.low}` : 
+    'N/A';
 
   return (
     <div
