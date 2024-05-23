@@ -31,7 +31,7 @@ export default function LoginPage() {
 
     return (
         <>
-            <section className="bg-gray-50 dark:bg-gray-900">
+            <section className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white rounded-lg bg-primary-400 hover:bg-primary-500  ">
                 <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                     <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white rounded-lg">
                         <img className="w-45 h-40 mr-2" src="/images/2.png" alt="logo" />
