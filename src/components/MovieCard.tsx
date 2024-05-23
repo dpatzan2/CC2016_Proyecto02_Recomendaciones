@@ -12,14 +12,15 @@ export default function MovieCard({ movie, onClick }: MovieCardProps) {
 
   return (
     <div
-      className="relative rounded-lg overflow-hidden shadow-lg cursor-pointer bg-gray-800"
+      className="bg-center relative rounded-lg overflow-hidden bg-neutral-800 rounded-3xl text-neutral-300 p-4 flex flex-col items-start justify-center gap-3 hover:bg-gray-900 hover:shadow-2xl hover:shadow-sky-400 transition-shadow"
       onClick={onClick}
     >
       <div className="w-full h-64 bg-cover bg-center" style={{ backgroundImage: `url(${movie.posterURL})` }}>
-        <div className="absolute bottom-0 left-0 bg-black bg-opacity-50 w-full p-5">
+        <div className="absolute bottom-0 left-0 bg-black bg-opacity-50 w-full p-1">
+          <p className="italic mt-1">{movie.countryOrigin}</p>
         </div>
       </div>
-      <div className="p-4 text-white">
+      <div className="p-4 text-white ">
         <h1 className="text-2xl font-bold mb-2">{movie.title}</h1>
         <ul className="flex flex-wrap space-x-2 text-sm mb-4">
           <li>{movie.duration}</li>
@@ -29,7 +30,6 @@ export default function MovieCard({ movie, onClick }: MovieCardProps) {
           <li>{movie.genres.join(', ')}</li>
         </ul>
         <p className="mt-2">{formatReleaseDate(movie.releaseDate)}</p>
-        <p className="italic mt-1">{movie.countryOrigin}</p>
       </div>
     </div>
   );

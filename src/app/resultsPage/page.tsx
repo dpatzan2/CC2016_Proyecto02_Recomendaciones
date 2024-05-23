@@ -5,7 +5,6 @@ import { useFilteredMovies } from '@/context/FilteredMoviesContext';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 
-
 export default function ResultsPage() {
     const { user, loading, logout } = useAuth();
     const router = useRouter();
@@ -48,70 +47,80 @@ export default function ResultsPage() {
                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded" onClick={handleCardClick}>
                     Intentar de nuevo
                 </button>
+                <h1 className="text-center mb-4 text-6xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">
+                        Cuestionario para filtro de películas
+                    </span>
+                </h1>
                 <h1 className="font-bold text-4xl mb-4">Películas con mayor compatibilidad</h1>
                 {filteredMoviesPaginated.length > 0 ? (
-                    <section className="w-fit mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mt-10 mb-5">
-                        {filteredMoviesPaginated.map((movie) => (
-                            <MovieCard key={movie.id.low} movie={movie} onClick={handleCardClick} />
-                        ))}
-                    </section>
+                    <div className="relative w-full">
+                        <button
+                            type="button"
+                            className="absolute top-1/2 transform -translate-y-1/2 left-2 z-30 flex items-center justify-center h-16 w-16 bg-gray-800 text-white rounded-full shadow-lg focus:outline-none"
+                            onClick={() => handlePageChange(setCurrentPageFiltered, currentPageFiltered - 1)}
+                            disabled={currentPageFiltered === 1}
+                        >
+                            <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                        <section className="w-fit mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mt-10 mb-5">
+                            {filteredMoviesPaginated.map((movie) => (
+                                <MovieCard key={movie.id.low} movie={movie} onClick={handleCardClick} />
+                            ))}
+                        </section>
+                        <button
+                            type="button"
+                            className="absolute top-1/2 transform -translate-y-1/2 right-2 z-30 flex items-center justify-center h-16 w-16 bg-gray-800 text-white rounded-full shadow-lg focus:outline-none"
+                            onClick={() => handlePageChange(setCurrentPageFiltered, currentPageFiltered + 1)}
+                            disabled={currentPageFiltered === totalFilteredPages}
+                        >
+                            <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
                 ) : (
                     <p>No movies found for the selected filters.</p>
                 )}
-                {
-                    filteredMoviesPaginated.length > 0 ? (
-                        <div className="flex justify-center space-x-2 pt-10">
-                            <button
-                                disabled={currentPageFiltered === 1}
-                                onClick={() => handlePageChange(setCurrentPageFiltered, currentPageFiltered - 1)}
-                            >
-                                Previous
-                            </button>
-                            <button
-                                disabled={currentPageFiltered === totalRelatedPages}
-                                onClick={() => handlePageChange(setCurrentPageFiltered, currentPageFiltered + 1)}
-                            >
-                                Next
-                            </button>
-                        </div>
-                    ) : (
-                        <></>
-                    )
-                }
             </div>
 
             <div className="text-center p-10">
                 <h1 className="font-bold text-4xl mb-4">Películas relacionadas</h1>
                 {relatedMoviesPaginated.length > 0 ? (
-                    <section className="w-fit mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mt-10 mb-5">
-                        {relatedMoviesPaginated.map((movie) => (
-                            <MovieCard key={movie.id.low} movie={movie} onClick={handleCardClick} />
-                        ))}
-                    </section>
+                    <div className="relative w-full">
+                        <button
+                            type="button"
+                            className="absolute top-1/2 transform -translate-y-1/2 left-2 z-30 flex items-center justify-center h-16 w-16 bg-gray-800 text-white rounded-full shadow-lg focus:outline-none"
+                            onClick={() => handlePageChange(setCurrentPageRelated, currentPageRelated - 1)}
+                            disabled={currentPageRelated === 1}
+                        >
+                            <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                        <section className="w-fit mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mt-10 mb-5">
+                            {relatedMoviesPaginated.map((movie) => (
+                                <MovieCard key={movie.id.low} movie={movie} onClick={handleCardClick} />
+                            ))}
+                        </section>
+                        <button
+                            type="button"
+                            className="absolute top-1/2 transform -translate-y-1/2 right-2 z-30 flex items-center justify-center h-16 w-16 bg-gray-800 text-white rounded-full shadow-lg focus:outline-none"
+                            onClick={() => handlePageChange(setCurrentPageRelated, currentPageRelated + 1)}
+                            disabled={currentPageRelated === totalRelatedPages}
+                        >
+                            <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
                 ) : (
                     <p>No related movies found.</p>
                 )}
-                {
-                    relatedMoviesPaginated.length > 0 ? (
-                        <div className="flex justify-center space-x-2 pt-10">
-                            <button
-                                disabled={currentPageRelated === 1}
-                                onClick={() => handlePageChange(setCurrentPageRelated, currentPageRelated - 1)}
-                            >
-                                Previous
-                            </button>
-                            <button
-                                disabled={currentPageRelated === totalRelatedPages}
-                                onClick={() => handlePageChange(setCurrentPageRelated, currentPageRelated + 1)}
-                            >
-                                Next
-                            </button>
-                        </div>
-                    ) : (
-                        <></>
-                    )
-                }
             </div>
+
             <button
                 onClick={logout}
                 className="fixed bottom-4 right-4 bg-red-500 text-white p-4 rounded-full shadow-lg hover:bg-red-700 transition duration-300"
@@ -123,6 +132,5 @@ export default function ResultsPage() {
                 <p><strong>User:</strong> {user}</p>
             </div>
         </div>
-
     );
 }
