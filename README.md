@@ -288,7 +288,7 @@ Para contribuir a este proyecto, por favor, sigue los siguientes pasos:
 
 ---
 
-### Integratnes
+### Integrantes
 
 1. Diego Fernando Patzán Marroquín (23525)
 2. Osman Emanuel de Leon Garcia (23428)
